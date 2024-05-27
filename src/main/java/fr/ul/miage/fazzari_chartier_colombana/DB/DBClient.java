@@ -1,7 +1,8 @@
-package fr.ul.miage.fazzari_chartier_colombana;
+package fr.ul.miage.fazzari_chartier_colombana.DB;
 
-public class DBBorne implements IDBEntite {
+import fr.ul.miage.fazzari_chartier_colombana.Interfaces.IDBEntite;
 
+public class DBClient implements IDBEntite {
     @Override
     public void ajouter() {
 

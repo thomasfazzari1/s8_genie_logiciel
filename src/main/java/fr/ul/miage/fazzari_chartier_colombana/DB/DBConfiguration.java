@@ -1,4 +1,4 @@
-package fr.ul.miage.fazzari_chartier_colombana;
+package fr.ul.miage.fazzari_chartier_colombana.DB;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
