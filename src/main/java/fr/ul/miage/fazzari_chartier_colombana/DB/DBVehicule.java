@@ -29,4 +29,11 @@ public class DBVehicule implements IDBVehicule {
     public ArrayList<Document> getVehicules() {
         return vehicules.find().into(new ArrayList<>());
     }
+
+    @Override
+    public boolean existe(String email, String immat) {
+        Document query = new Document("Email client", email).append("Immatriculation vehicule", immat);
+        return vehicules.find(query).first() != null;
+    }
+
 }
