@@ -1,5 +1,5 @@
 import com.mongodb.client.MongoClient;
-import fr.ul.miage.fazzari_chartier_colombana.DBConfiguration;
+import fr.ul.miage.fazzari_chartier_colombana.DB.DBConfiguration;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
