@@ -1,9 +1,15 @@
 package fr.ul.miage.fazzari_chartier_colombana.Services;
 
+import fr.ul.miage.fazzari_chartier_colombana.DB.DBClient;
+
 import java.util.Scanner;
 
 public class GestionnaireClient {
+    private static DBClient clients;
+
     public static void ajouterClient() {
+        clients = new DBClient();
+
         Scanner scanner = new Scanner(System.in);
         System.out.print("Nom : "); String nom = scanner.nextLine();
         System.out.print("Prénom : "); String prenom = scanner.nextLine();
@@ -18,11 +24,11 @@ public class GestionnaireClient {
         else if (telephone.equals("")) System.out.print("❌ Le numéro de téléphone du client ne peut pas être vide.");
         else if (email.equals("")) System.out.print("❌ L'email du client ne peut pas être vide.");
         else if (cb.equals("")) System.out.print("❌ La carte bancaire du client ne peut pas être vide.");
+        else if (clients.existe(email)) System.out.println("❌ Cet email est déjà associé à un client.");
         else {
             // Après avoir géré l'ajout des véhicule, proposer au client s'il souhaite ajouter son 1er véhicule ici !
 
-            // Faire l'insert dans la base ici !
-
+            clients.ajouter(nom, prenom, adresse, telephone, email, cb);
             System.out.println("✅ Client ajouté avec succès.\n");
         }
     }

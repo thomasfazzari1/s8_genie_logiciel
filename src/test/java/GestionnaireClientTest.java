@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import fr.ul.miage.fazzari_chartier_colombana.DB.DBClient;
 import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -107,5 +108,21 @@ public class GestionnaireClientTest {
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
         assertTrue(sortie.contains("❌ La carte bancaire du client ne peut pas être vide."));
+    }
+
+    @Test @DisplayName("Un email déjà existant est géré")
+    public void testEmailDejaExistant() {
+        DBClient clients = new DBClient();
+        clients.ajouter("Chartier","Guillaume","Grande Rue","0666666666","email@gmail.com","1234123412341234");
+        String saisie = "Chartier\nGuillaume\nGrande Rue\n0666666666\nemail@gmail.com\n1234123412341234";
+        InputStream in = new ByteArrayInputStream(saisie.getBytes());
+        System.setIn(in);
+        ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(contenuSortie));
+        GestionnaireClient.ajouterClient();
+        System.setIn(System.in);
+        System.setOut(System.out);
+        String sortie = contenuSortie.toString();
+        assertTrue(sortie.contains("❌ Cet email est déjà associé à un client."));
     }
 }
