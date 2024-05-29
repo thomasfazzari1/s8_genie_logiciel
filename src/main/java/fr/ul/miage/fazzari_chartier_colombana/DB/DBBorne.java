@@ -14,7 +14,7 @@ public class DBBorne implements IDBBorne {
     private static MongoCollection<Document> bornes = database.getCollection("Bornes");
 
     @Override
-    public void ajouter(int id, String emplacement) {
+    public void ajouter(Integer id, String emplacement) {
         bornes.insertOne(new Document()
                 .append("Id", id)
                 .append("Emplacement", emplacement)
@@ -22,7 +22,7 @@ public class DBBorne implements IDBBorne {
     }
 
     @Override
-    public void supprimer(int id) {
+    public void supprimer(Integer id) {
         bornes.deleteOne(new Document("Id", id));
     }
 
@@ -32,7 +32,7 @@ public class DBBorne implements IDBBorne {
     }
 
     @Override
-    public boolean existe(int id) {
+    public boolean existe(Integer id) {
         Bson filter = Filters.eq("Id", id);
         return bornes.find(filter).first() != null;
     }

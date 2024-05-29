@@ -14,7 +14,7 @@ public class DBContrat implements IDBContrat {
     private static MongoCollection<Document> contrats = database.getCollection("Contrats");
 
     @Override
-    public void ajouter(int id, String email, String borne, String dateA, String heureA, String dateD, String heureD, String immat) {
+    public void ajouter(Integer id, String email, String borne, String dateA, String heureA, String dateD, String heureD, String immat) {
         contrats.insertOne(new Document()
                 .append("Id", id)
                 .append("Email client", email)
@@ -28,7 +28,7 @@ public class DBContrat implements IDBContrat {
     }
 
     @Override
-    public void supprimer(int id) {
+    public void supprimer(Integer id) {
         contrats.deleteOne(new Document("Id", id));
     }
 
@@ -38,7 +38,7 @@ public class DBContrat implements IDBContrat {
     }
 
     @Override
-    public boolean existe(int id) {
+    public boolean existe(Integer id) {
         Bson filter = Filters.eq("Id", id);
         return contrats.find(filter).first() != null;
     }
