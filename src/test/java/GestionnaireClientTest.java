@@ -14,6 +14,7 @@ import java.io.PrintStream;
 public class GestionnaireClientTest {
     @Test @DisplayName("L'ajout d'un client fonctionne")
     public void testClient() {
+        DBClient clients = new DBClient();
         String saisie = "Chartier\nGuillaume\nGrande Rue\n0666666666\nemail@gmail.com\n1234123412341234";
         InputStream in = new ByteArrayInputStream(saisie.getBytes());
         System.setIn(in);
@@ -24,6 +25,7 @@ public class GestionnaireClientTest {
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
         assertTrue(sortie.contains("✅ Client ajouté avec succès."));
+        clients.supprimer("email@gmail.com");
     }
 
     @Test @DisplayName("La saisie d'un nom vide est gérée")
@@ -124,5 +126,6 @@ public class GestionnaireClientTest {
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
         assertTrue(sortie.contains("❌ Cet email est déjà associé à un client."));
+        clients.supprimer("email@gmail.com");
     }
 }
