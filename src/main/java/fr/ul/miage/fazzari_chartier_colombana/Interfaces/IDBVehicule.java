@@ -11,4 +11,5 @@ public interface IDBVehicule {
 
     ArrayList<Document> getVehicules();
 
+    boolean existe(String email, String immat);
 }
