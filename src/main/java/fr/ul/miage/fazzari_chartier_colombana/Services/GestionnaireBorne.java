@@ -8,7 +8,8 @@ public class GestionnaireBorne {
     private static DBBorne bornes = new DBBorne();
 
     private enum Choix {
-        AJOUT
+        AJOUT,
+        SUPPRESSION
     }
 
     public static void ajouterBorne() {
@@ -23,6 +24,9 @@ public class GestionnaireBorne {
             bornes.ajouter(id, emplacement);
             System.out.println("✅ Borne ajoutée avec succès.");
         }
+    }
+
+    public static void supprimerBorne() {
     }
 
     private static Integer saisieID(Scanner scanner) {
