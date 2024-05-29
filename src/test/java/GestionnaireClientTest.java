@@ -18,7 +18,7 @@ public class GestionnaireClientTest {
         System.setIn(in);
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         System.setOut(new PrintStream(contenuSortie));
-        GestionnaireClient.AjouterClient();
+        GestionnaireClient.ajouterClient();
         System.setIn(System.in);
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
@@ -32,7 +32,7 @@ public class GestionnaireClientTest {
         System.setIn(in);
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         System.setOut(new PrintStream(contenuSortie));
-        GestionnaireClient.AjouterClient();
+        GestionnaireClient.ajouterClient();
         System.setIn(System.in);
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
@@ -46,7 +46,7 @@ public class GestionnaireClientTest {
         System.setIn(in);
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         System.setOut(new PrintStream(contenuSortie));
-        GestionnaireClient.AjouterClient();
+        GestionnaireClient.ajouterClient();
         System.setIn(System.in);
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
@@ -60,7 +60,7 @@ public class GestionnaireClientTest {
         System.setIn(in);
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         System.setOut(new PrintStream(contenuSortie));
-        GestionnaireClient.AjouterClient();
+        GestionnaireClient.ajouterClient();
         System.setIn(System.in);
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
@@ -74,7 +74,7 @@ public class GestionnaireClientTest {
         System.setIn(in);
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         System.setOut(new PrintStream(contenuSortie));
-        GestionnaireClient.AjouterClient();
+        GestionnaireClient.ajouterClient();
         System.setIn(System.in);
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
@@ -88,7 +88,7 @@ public class GestionnaireClientTest {
         System.setIn(in);
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         System.setOut(new PrintStream(contenuSortie));
-        GestionnaireClient.AjouterClient();
+        GestionnaireClient.ajouterClient();
         System.setIn(System.in);
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
@@ -102,7 +102,7 @@ public class GestionnaireClientTest {
         System.setIn(in);
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         System.setOut(new PrintStream(contenuSortie));
-        GestionnaireClient.AjouterClient();
+        GestionnaireClient.ajouterClient();
         System.setIn(System.in);
         System.setOut(System.out);
         String sortie = contenuSortie.toString();
