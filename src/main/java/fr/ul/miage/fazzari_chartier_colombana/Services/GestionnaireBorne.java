@@ -27,6 +27,20 @@ public class GestionnaireBorne {
     }
 
     public static void supprimerBorne() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            afficherChoixCourant(Choix.SUPPRESSION.toString());
+            System.out.print("Saisir l'ID de la borne à supprimer : ");
+            Integer id = saisieID(scanner);
+            if (bornes.existe(id)) {
+                bornes.supprimer(id);
+                System.out.println("✅ Borne supprimée avec succès.\n");
+                break;
+            } else {
+                System.out.println("❌ Aucune borne avec cet identifiant n'a été trouvée.");
+            }
+        }
     }
 
     private static Integer saisieID(Scanner scanner) {
@@ -77,5 +91,13 @@ public class GestionnaireBorne {
             System.out.println("╚═════════════════════════════════════╝");
             return;
         }
+        if (choix.equals(Choix.SUPPRESSION.toString())) {
+            System.out.println("╔═════════════════════════════════════╗");
+            System.out.println("║ MENU                                ║");
+            System.out.println("║ └ Supprimer une borne               ║");
+            System.out.println("╚═════════════════════════════════════╝");
+            return;
+        }
     }
 }
+
