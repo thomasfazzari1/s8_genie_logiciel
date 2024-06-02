@@ -8,7 +8,8 @@ public class GestionnaireBorne {
     private static DBBorne bornes = new DBBorne();
 
     private enum Choix {
-        AJOUT
+        AJOUT,
+        SUPPRESSION
     }
 
     public static void ajouterBorne() {
@@ -22,6 +23,23 @@ public class GestionnaireBorne {
         } else {
             bornes.ajouter(id, emplacement);
             System.out.println("✅ Borne ajoutée avec succès.");
+        }
+    }
+
+    public static void supprimerBorne() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            afficherChoixCourant(Choix.SUPPRESSION.toString());
+            System.out.print("Saisir l'ID de la borne à supprimer : ");
+            Integer id = saisieID(scanner);
+            if (bornes.existe(id)) {
+                bornes.supprimer(id);
+                System.out.println("✅ Borne supprimée avec succès.\n");
+                break;
+            } else {
+                System.out.println("❌ Aucune borne avec cet identifiant n'a été trouvée.");
+            }
         }
     }
 
@@ -70,6 +88,13 @@ public class GestionnaireBorne {
             System.out.println("╔═════════════════════════════════════╗");
             System.out.println("║ MENU                                ║");
             System.out.println("║ └ Ajouter une borne                 ║");
+            System.out.println("╚═════════════════════════════════════╝");
+            return;
+        }
+        if (choix.equals(Choix.SUPPRESSION.toString())) {
+            System.out.println("╔═════════════════════════════════════╗");
+            System.out.println("║ MENU                                ║");
+            System.out.println("║ └ Supprimer une borne               ║");
             System.out.println("╚═════════════════════════════════════╝");
             return;
         }
