@@ -2,6 +2,9 @@ package fr.ul.miage.fazzari_chartier_colombana.Services;
 
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBBorne;
 
+import org.bson.Document;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GestionnaireBorne {
@@ -9,7 +12,8 @@ public class GestionnaireBorne {
 
     private enum Choix {
         AJOUT,
-        SUPPRESSION
+        SUPPRESSION,
+        AFFICHAGE
     }
 
     public static void ajouterBorne() {
@@ -39,6 +43,19 @@ public class GestionnaireBorne {
                 break;
             } else {
                 System.out.println("❌ Aucune borne avec cet identifiant n'a été trouvée.");
+            }
+        }
+    }
+
+    public static void afficherBornes() {
+        ArrayList<Document> allBornes = bornes.getBornes();
+        if (allBornes.isEmpty()) {
+            System.out.println("❌ Aucune borne enregistrée.");
+        } else {
+            for (Document borne : allBornes) {
+                System.out.println("Id : " + borne.get("Id").toString());
+                System.out.println("Emplacement : " + borne.getString("Emplacement"));
+                System.out.println();
             }
         }
     }
@@ -95,6 +112,13 @@ public class GestionnaireBorne {
             System.out.println("╔═════════════════════════════════════╗");
             System.out.println("║ MENU                                ║");
             System.out.println("║ └ Supprimer une borne               ║");
+            System.out.println("╚═════════════════════════════════════╝");
+            return;
+        }
+        if (choix.equals(Choix.AFFICHAGE.toString())) {
+            System.out.println("╔═════════════════════════════════════╗");
+            System.out.println("║ MENU                                ║");
+            System.out.println("║ └ Afficher la liste des bornes      ║");
             System.out.println("╚═════════════════════════════════════╝");
             return;
         }

@@ -1,5 +1,7 @@
 package fr.ul.miage.fazzari_chartier_colombana;
 
+import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireBorne;
+
 import java.util.Scanner;
 
 public class Main {
@@ -13,21 +15,42 @@ public class Main {
             choix = scanner.nextLine();
             System.out.println();
             switch (choix) {
-                case "0": System.out.println("Au revoir !"); programme = false; break;
-                case "1": break;
-                case "2": break;
-                case "3": break;
-                case "4": break;
-                case "5": break;
-                case "6": break;
-                case "7": break;
-                case "8": break;
-                case "9": break;
-                case "10": break;
-                case "11": break;
-                case "12": break;
-                case "13": break;
-                default: System.out.println("Saisie incorrecte."); break;
+                case "0":
+                    System.out.println("Au revoir !");
+                    programme = false;
+                    break;
+                case "1":
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    break;
+                case "4":
+                    break;
+                case "5":
+                    break;
+                case "6":
+                    break;
+                case "7":
+                    GestionnaireBorne.afficherBornes();
+                    break;
+                case "8":
+                    break;
+                case "9":
+                    GestionnaireBorne.ajouterBorne();
+                    break;
+                case "10":
+                    GestionnaireBorne.supprimerBorne();
+                    break;
+                case "11":
+                    break;
+                case "12":
+                    break;
+                case "13":
+                    break;
+                default:
+                    System.out.println("Saisie incorrecte.");
+                    break;
             }
         }
     }
