@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 
 @DisplayName("On teste si...")
 public class DBVehiculeTest {
-    DBVehicule dbVehicule = new DBVehicule();
+    DBVehicule dbVehicule = DBVehicule.getInstance();
 
     @Test
     @DisplayName("La vérification de l'existence d'un véhicule dans la base fonctionne")

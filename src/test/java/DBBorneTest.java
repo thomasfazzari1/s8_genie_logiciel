@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("On teste si...")
 public class DBBorneTest {
-    DBBorne dbBorne = new DBBorne();
+    DBBorne dbBorne = DBBorne.getInstance();
 
     @Test
     @DisplayName("La vérification de l'existence d'une borne dans la base fonctionne")
     public void testExiste() {
         dbBorne.ajouter(4, "Emplacement test");
-        assertTrue(dbBorne.existe(4));
+        assertTrue(DBBorne.getInstance().existe(4));
         assertFalse(dbBorne.existe(5));
     }
 

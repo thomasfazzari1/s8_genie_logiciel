@@ -5,7 +5,12 @@ import fr.ul.miage.fazzari_chartier_colombana.DB.DBBorne;
 import java.util.Scanner;
 
 public class GestionnaireBorne {
-    private static DBBorne bornes = new DBBorne();
+    private static DBBorne bornes = DBBorne.getInstance();
+
+    // Constructeur pour les injections de dépendances (Mocks GestionnaireBorneTest)
+    public GestionnaireBorne(DBBorne dbBorne) {
+        bornes = dbBorne;
+    }
 
     private enum Choix {
         AJOUT,

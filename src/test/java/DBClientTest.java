@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 
 @DisplayName("On teste si...")
 public class DBClientTest {
-    DBClient dbClient = new DBClient();
+    DBClient dbClient = DBClient.getInstance();
 
     @Test
     @DisplayName("La vérification de l'existence d'un client dans la base fonctionne")

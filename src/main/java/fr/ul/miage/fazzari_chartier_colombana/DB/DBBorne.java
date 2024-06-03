@@ -10,8 +10,19 @@ import org.bson.conversions.Bson;
 import java.util.ArrayList;
 
 public class DBBorne implements IDBBorne {
+    private static DBBorne instance;
     private static MongoDatabase database = DBConfiguration.getDatabase();
     private static MongoCollection<Document> bornes = database.getCollection("Bornes");
+
+    private DBBorne() {
+    }
+
+    public static DBBorne getInstance() {
+        if (instance == null) {
+            instance = new DBBorne();
+        }
+        return instance;
+    }
 
     @Override
     public void ajouter(Integer id, String emplacement) {

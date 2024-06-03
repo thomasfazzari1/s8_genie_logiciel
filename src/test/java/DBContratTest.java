@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 @DisplayName("On teste si...")
 public class DBContratTest {
-    DBContrat dbContrat = new DBContrat();
+    DBContrat dbContrat = DBContrat.getInstance();
 
     @Test
     @DisplayName("La vérification de l'existence d'un contrat dans la base fonctionne")
