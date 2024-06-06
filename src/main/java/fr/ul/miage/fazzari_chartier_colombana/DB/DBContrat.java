@@ -17,7 +17,7 @@ public class DBContrat implements IDBContrat {
     private DBContrat() {
     }
 
-    public static synchronized DBContrat getInstance() {
+    public static DBContrat getInstance() {
         if (instance == null) {
             instance = new DBContrat();
         }

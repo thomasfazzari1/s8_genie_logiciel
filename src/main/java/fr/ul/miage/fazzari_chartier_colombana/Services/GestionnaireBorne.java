@@ -15,12 +15,6 @@ public class GestionnaireBorne {
         bornes = dbBorne;
     }
 
-    private enum Choix {
-        AJOUT,
-        SUPPRESSION,
-        AFFICHAGE
-    }
-
     public static void ajouterBorne() {
         Scanner scanner = new Scanner(System.in);
         afficherChoixCourant(Choix.AJOUT.toString());

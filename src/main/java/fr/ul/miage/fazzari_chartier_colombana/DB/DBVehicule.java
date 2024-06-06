@@ -16,7 +16,7 @@ public class DBVehicule implements IDBVehicule {
     private DBVehicule() {
     }
 
-    public static synchronized DBVehicule getInstance() {
+    public static DBVehicule getInstance() {
         if (instance == null) {
             instance = new DBVehicule();
         }
