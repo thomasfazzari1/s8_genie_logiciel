@@ -10,8 +10,19 @@ import org.bson.conversions.Bson;
 import java.util.ArrayList;
 
 public class DBContrat implements IDBContrat {
+    private static DBContrat instance;
     private static MongoDatabase database = DBConfiguration.getDatabase();
     private static MongoCollection<Document> contrats = database.getCollection("Contrats");
+
+    private DBContrat() {
+    }
+
+    public static synchronized DBContrat getInstance() {
+        if (instance == null) {
+            instance = new DBContrat();
+        }
+        return instance;
+    }
 
     @Override
     public void ajouter(Integer id, String email, String borne, String dateA, String heureA, String dateD, String heureD, String immat) {

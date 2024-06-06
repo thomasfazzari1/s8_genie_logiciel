@@ -9,8 +9,19 @@ import org.bson.Document;
 import java.util.ArrayList;
 
 public class DBVehicule implements IDBVehicule {
+    private static DBVehicule instance;
     private static MongoDatabase database = DBConfiguration.getDatabase();
     private static MongoCollection<Document> vehicules = database.getCollection("Vehicules");
+
+    private DBVehicule() {
+    }
+
+    public static synchronized DBVehicule getInstance() {
+        if (instance == null) {
+            instance = new DBVehicule();
+        }
+        return instance;
+    }
 
     @Override
     public void ajouter(String email, String immat) {

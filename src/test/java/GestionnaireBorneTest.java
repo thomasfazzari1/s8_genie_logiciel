@@ -1,9 +1,14 @@
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBBorne;
 import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireBorne;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,7 +17,17 @@ import java.io.PrintStream;
 
 @DisplayName("On teste si...")
 public class GestionnaireBorneTest {
-    DBBorne bornes = new DBBorne();
+
+    @Mock
+    private DBBorne bornes;
+
+    @InjectMocks
+    private GestionnaireBorne gestionnaireBorne;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     private void setEntreeSortie(String input, ByteArrayOutputStream outputStream) {
         InputStream in = new ByteArrayInputStream(input.getBytes());
@@ -27,8 +42,9 @@ public class GestionnaireBorneTest {
 
         Thread testThread = new Thread(() -> {
             try {
-                GestionnaireBorne.ajouterBorne();
+                gestionnaireBorne.ajouterBorne();
             } catch (Exception e) {
+                e.printStackTrace();
             }
         });
         testThread.start();
@@ -88,7 +104,7 @@ public class GestionnaireBorneTest {
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         setEntreeSortie(saisie, contenuSortie);
 
-        GestionnaireBorne.ajouterBorne();
+        gestionnaireBorne.ajouterBorne();
 
         System.setIn(System.in);
         System.setOut(System.out);
@@ -96,27 +112,25 @@ public class GestionnaireBorneTest {
         String sortie = contenuSortie.toString();
         assertTrue(sortie.contains("✅ Borne ajoutée avec succès."));
 
-        bornes.supprimer(999999999);
+        verify(bornes).ajouter(999999999, "Emplacement Valide");
     }
 
     @Test
     @DisplayName("L'ajout d'une borne déjà existante est géré")
     public void testAjoutBorneExistante() {
-        bornes.ajouter(123, "Test");
+        when(bornes.existe(123)).thenReturn(true);
 
         String saisie = "123\nEmplacement Test";
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         setEntreeSortie(saisie, contenuSortie);
 
-        GestionnaireBorne.ajouterBorne();
+        gestionnaireBorne.ajouterBorne();
 
         System.setIn(System.in);
         System.setOut(System.out);
 
         String sortie = contenuSortie.toString();
         assertTrue(sortie.contains("❌ Une borne avec cet identifiant est déjà enregistrée."));
-
-        bornes.supprimer(123);
     }
     // endregion
 
@@ -127,7 +141,7 @@ public class GestionnaireBorneTest {
 
         Thread testThread = new Thread(() -> {
             try {
-                GestionnaireBorne.supprimerBorne();
+                gestionnaireBorne.supprimerBorne();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -149,15 +163,17 @@ public class GestionnaireBorneTest {
     @Test
     @DisplayName("La suppression d'une borne existante fonctionne")
     public void testSuppressionBorneExistante() {
-        bornes.ajouter(999, "testSuppressionBorneExistante");
+        when(bornes.existe(999)).thenReturn(true);
+
         testerSaisieSuppression("999\n", "✅ Borne supprimée avec succès.");
-        assertFalse(bornes.existe(999));
+        verify(bornes).supprimer(999);
     }
 
     @Test
     @DisplayName("La suppression d'une borne inexistante est gérée")
     public void testSuppressionBorneInexistante() {
-        bornes.supprimer(888);
+        when(bornes.existe(888)).thenReturn(false);
+
         testerSaisieSuppression("888\n", "❌ Aucune borne avec cet identifiant n'a été trouvée.");
     }
 
@@ -208,6 +224,5 @@ public class GestionnaireBorneTest {
         String messageAttendu = "❌ Veuillez saisir un ID compris entre les limites.";
         testerSaisieSuppression(saisie, messageAttendu);
     }
-
     // endregion
 }
