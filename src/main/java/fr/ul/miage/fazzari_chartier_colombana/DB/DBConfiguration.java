@@ -10,8 +10,13 @@ public class DBConfiguration {
 
     private static MongoClient mongoClient = null;
 
-    public static MongoClient getMongoClient() {
-        if (mongoClient == null) mongoClient = MongoClients.create(CONNECTION_STRING);
+    private DBConfiguration() {
+    }
+
+    public static synchronized MongoClient getMongoClient() {
+        if (mongoClient == null) {
+            mongoClient = MongoClients.create(CONNECTION_STRING);
+        }
         return mongoClient;
     }
 
@@ -20,6 +25,9 @@ public class DBConfiguration {
     }
 
     public static void close() {
-        if (mongoClient != null) mongoClient.close();
+        if (mongoClient != null) {
+            mongoClient.close();
+            mongoClient = null; // reset to ensure a new client can be created next time
+        }
     }
 }

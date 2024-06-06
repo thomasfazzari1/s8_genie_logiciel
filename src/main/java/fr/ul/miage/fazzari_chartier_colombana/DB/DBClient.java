@@ -10,8 +10,19 @@ import org.bson.conversions.Bson;
 import java.util.ArrayList;
 
 public class DBClient implements IDBClient {
+    private static DBClient instance;
     private static MongoDatabase database = DBConfiguration.getDatabase();
     private static MongoCollection<Document> clients = database.getCollection("Clients");
+
+    private DBClient() {
+    }
+
+    public static DBClient getInstance() {
+        if (instance == null) {
+            instance = new DBClient();
+        }
+        return instance;
+    }
 
     @Override
     public void ajouter(String nom, String prenom, String adresse, String telephone, String email, String cb) {
