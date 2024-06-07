@@ -9,7 +9,28 @@ import java.util.regex.Pattern;
 public class GestionnaireVehicule {
     private static DBVehicule vehicules = DBVehicule.getInstance();
     private static DBClient clients = DBClient.getInstance();
-    private static final Pattern PLAQUE_FR_PATTERN = Pattern.compile("^[A-Z]{2}-\\d{3}-[A-Z]{2}$");
+    private static final Pattern PLAQUE_PATTERN = Pattern.compile(
+            "^(?:" +
+                    "[A-Z]{2}-\\d{3}-[A-Z]{2}" +    // Format français (Nouveau)
+                    "|" +
+                    "[A-Z]{2}-\\d{3}-[A-Z]{2}" + // Format français (Ancien)
+                    "|" +
+                    "[A-Z]{1,3}-\\d{1,4}-[A-Z]{1,2}" + // Format allemand / britannique
+                    "|" +
+                    "\\d{2}-[A-Z]{3}-\\d{3}" +      // Format italien
+                    "|" +
+                    "\\d{1,2}-[A-Z]{3}-\\d{1,3}" +  // Format espagnol
+                    "|" +
+                    "[A-Z]{3}\\d{2}" +              // Format luxembourgeois
+                    "|" +
+                    "[A-Z]{2}\\d{2}[A-Z]{3}" +      // Format néerlandais
+                    "|" +
+                    "[A-Z]{1,2}\\d{1,4}[A-Z]{1,2}" +   // Format belge
+                    "|" +
+                    "\\d{4}[A-Z]{2}" +              // Format suisse
+                    "|" +
+                    "\\d{2}-\\d{2}-\\d{2}" +        // Format norvégien
+                    ")$");
 
     // Constructeur pour les injections de dépendances (Mocks GestionnaireVehiculeTest)
     public GestionnaireVehicule(DBVehicule dbVehicule, DBClient dbClient) {
@@ -50,7 +71,7 @@ public class GestionnaireVehicule {
     }
 
     private static boolean plaqueValide(String plaque) {
-        return PLAQUE_FR_PATTERN.matcher(plaque).matches();
+        return PLAQUE_PATTERN.matcher(plaque).matches();
     }
 
     private static void afficherChoixCourant(String choix) {

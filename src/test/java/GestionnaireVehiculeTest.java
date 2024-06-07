@@ -119,4 +119,41 @@ public class GestionnaireVehiculeTest {
 
         testerSaisieAjoutVehicule(saisie, "❌ Aucun utilisateur n'est associé à cet email.");
     }
+
+    @Test
+    @DisplayName("Les différents formats de plaques d'immatriculation pris en compte sont bien gérés")
+    public void testTousFormatsPlaquesValid() {
+        when(clients.existe("email_valide@example.com")).thenReturn(true);
+
+        String[] plaquesValides = {
+                "AB-123-CD",  // Format français (Nouveau)
+                "AB-123-CD",  // Format français (Ancien)
+                "A-1234-BC",  // Format allemand / britannique
+                "12-ABC-345", // Format italien
+                "12-ABC-345", // Format espagnol
+                "ABC12",      // Format luxembourgeois
+                "AB12CDE",    // Format néerlandais
+                "A1234BC",    // Format belge
+                "1234AB",     // Format suisse
+                "12-34-56"    // Format norvégien
+        };
+
+        for (String plaque : plaquesValides) {
+            String saisie = "email_valide@example.com\n" + plaque + "\n";
+            ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
+            setEntreeSortie(saisie, contenuSortie);
+
+            gestionnaireVehicule.ajouterVehicule();
+
+            System.setIn(System.in);
+            System.setOut(System.out);
+
+            String sortie = contenuSortie.toString();
+            assertTrue(sortie.contains("✅ Véhicule ajouté avec succès."));
+
+            verify(vehicules).ajouter("email_valide@example.com", plaque);
+            reset(vehicules);
+        }
+    }
+
 }
