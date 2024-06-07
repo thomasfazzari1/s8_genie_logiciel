@@ -166,11 +166,11 @@ public class GestionnaireReservation {
             System.out.println(new MessageBuilder().addErrorMessage("❌ Aucune réservation enregistrée."));
         else {
             for (Document doc : reservationsList) {
-                System.out.println("Id réservation : " + doc.getString("Id"));
-                System.out.println("Email client : " + doc.getString("Email client"));
-                System.out.println("Id borne : " + doc.getString("Id borne"));
-                System.out.println("Arrivée : le " + doc.getString("Date arrivee") + " à " + doc.getString("Heure arrivee"));
-                System.out.println("Départ : le " + doc.getString("Date depart") + " à " + doc.getString("Heure depart"));
+                System.out.println("Id réservation : " + doc.get("Id"));
+                System.out.println("Email client : " + doc.get("Email client"));
+                System.out.println("Id borne : " + doc.get("Id borne"));
+                System.out.println("Arrivée : le " + doc.get("Date arrivee") + " à " + doc.get("Heure arrivee"));
+                System.out.println("Départ : le " + doc.get("Date depart") + " à " + doc.get("Heure depart"));
                 System.out.println();
             }
         }

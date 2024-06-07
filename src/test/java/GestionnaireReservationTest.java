@@ -238,5 +238,86 @@ public class GestionnaireReservationTest {
         verify(reservations, never()).ajouter(anyInt(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
+    @Test
+    @DisplayName("Suppression de réservation avec ID valide")
+    public void testSuppressionReservationIDValide() {
+        ArrayList<Document> reservationsList = new ArrayList<>();
+        Document reservation = new Document();
+        reservation.append("Id", 1);
+        reservationsList.add(reservation);
+
+        when(reservations.existe(1)).thenReturn(true);
+
+        testerSaisieSuppressionReservation("1\n", "✅ Réservation supprimée avec succès.");
+        verify(reservations).supprimer(1);
+    }
+
+    @Test
+    @DisplayName("Suppression de réservation avec ID invalide")
+    public void testSuppressionReservationIDInvalide() {
+        when(reservations.existe(999)).thenReturn(false);
+
+        testerSaisieSuppressionReservation("999\n", "❌ Aucune réservation n'est associée à cet id.");
+        verify(reservations, never()).supprimer(999);
+    }
+
+    @Test
+    @DisplayName("Affichage des réservations")
+    public void testAffichageReservationsListeNonVide() {
+        ArrayList<Document> reservationsList = new ArrayList<>();
+        Document reservation = new Document();
+        reservation.append("Id", 1);
+        reservation.append("Email client", "test@test.com");
+        reservation.append("Id borne", "B1");
+        reservation.append("Date arrivee", "2024-06-01");
+        reservation.append("Heure arrivee", "10:00");
+        reservation.append("Date depart", "2024-06-01");
+        reservation.append("Heure depart", "12:00");
+        reservationsList.add(reservation);
+
+        when(reservations.getReservations()).thenReturn(reservationsList);
+
+        ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
+        setEntreeSortie("", contenuSortie);
+
+        gestionnaireReservation.afficherReservations();
+
+        String sortieAttendue = "Id réservation : 1";
+        String sortie = contenuSortie.toString();
+        assertTrue(sortie.contains(sortieAttendue));
+    }
+
+    @Test
+    @DisplayName("Ajout d'une réservation avec une immatriculation invalide")
+    public void testAjoutReservationImmatriculationInvalide() {
+        String saisie = "test@test.com\n07/06/2024\n10:00\n07/06/2024\n12:00\nB1\nimmatriculation_invalid\n";
+        testerSaisieAjouterReservation(saisie, "❌ L'immatriculation du véhicule est invalide.");
+
+        verify(reservations, never()).ajouter(anyInt(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
+    }
+
+    private void testerSaisieSuppressionReservation(String saisie, String messageAttendu) {
+        ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
+        setEntreeSortie(saisie, contenuSortie);
+
+        Thread testThread = new Thread(() -> {
+            try {
+                gestionnaireReservation.supprimerReservation();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        testThread.start();
+
+        try {
+            testThread.join(2000); // Attendre que le thread se termine ou timeout après 2 secondes
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String sortie = contenuSortie.toString();
+        assertTrue(sortie.contains(messageAttendu));
+    }
+
     // endregion
 }
