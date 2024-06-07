@@ -202,7 +202,6 @@ public class GestionnaireReservationTest {
         assertTrue(sortie.contains(messageAttendu));
     }
 
-
     @Test
     @DisplayName("Ajout d'une réservation avec des données valides")
     public void testAjoutReservationValide() {
@@ -229,7 +228,6 @@ public class GestionnaireReservationTest {
         verify(reservations, never()).ajouter(anyInt(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
-
     @Test
     @DisplayName("Ajout d'une réservation avec des dates dans un format incorrect")
     public void testAjoutReservationDateFormatIncorrect() {
@@ -239,25 +237,32 @@ public class GestionnaireReservationTest {
     }
 
     @Test
-    @DisplayName("Suppression de réservation avec ID valide")
+    @DisplayName("Suppression de réservation avec ID valide appartenant à l'utilisateur")
     public void testSuppressionReservationIDValide() {
         ArrayList<Document> reservationsList = new ArrayList<>();
         Document reservation = new Document();
         reservation.append("Id", 1);
+        reservation.append("Email client", "test@test.com");
         reservationsList.add(reservation);
 
-        when(reservations.existe(1)).thenReturn(true);
+        when(reservations.getReservationsAVenirDuClient("test@test.com")).thenReturn(reservationsList);
 
-        testerSaisieSuppressionReservation("1\n", "✅ Réservation supprimée avec succès.");
+        testerSaisieSuppressionReservation("test@test.com\n1\n", "✅ Réservation supprimée avec succès.");
         verify(reservations).supprimer(1);
     }
 
     @Test
-    @DisplayName("Suppression de réservation avec ID invalide")
+    @DisplayName("Suppression de réservation avec ID invalide pour l'utilisateur")
     public void testSuppressionReservationIDInvalide() {
-        when(reservations.existe(999)).thenReturn(false);
+        ArrayList<Document> reservationsList = new ArrayList<>();
+        Document reservation = new Document();
+        reservation.append("Id", 1);
+        reservation.append("Email client", "test@test.com");
+        reservationsList.add(reservation);
 
-        testerSaisieSuppressionReservation("999\n", "❌ Aucune réservation n'est associée à cet id.");
+        when(reservations.getReservationsAVenirDuClient("test@test.com")).thenReturn(reservationsList);
+
+        testerSaisieSuppressionReservation("test@test.com\n999\n", "❌ L'ID saisi ne correspond à aucune réservation associée à cet email.");
         verify(reservations, never()).supprimer(999);
     }
 

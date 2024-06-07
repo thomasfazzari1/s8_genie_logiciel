@@ -148,15 +148,48 @@ public class GestionnaireReservation {
     public static void supprimerReservation() {
         afficherChoixCourant(Choix.SUPPRESSION.toString());
         Scanner scanner = new Scanner(System.in);
-        boolean boucle = true;
-        while (boucle) {
-            Integer id = saisieID(scanner, "la réservation");
-            if (reservations.existe(id)) {
-                reservations.supprimer(id);
-                System.out.println(new MessageBuilder().addSuccessMessage("✅ Réservation supprimée avec succès.\n").build());
-                boucle = false;
-            } else
-                System.out.println(new MessageBuilder().addErrorMessage("❌ Aucune réservation n'est associée à cet id.").build());
+
+        System.out.print("Veuillez saisir votre email : ");
+        String email = scanner.nextLine();
+
+        if (!saisieEmail(email)) {
+            System.out.println(new MessageBuilder().addErrorMessage("❌ L'adresse e-mail est invalide.").build());
+            return;
+        }
+
+        ArrayList<Document> currentReservations = reservations.getReservationsAVenirDuClient(email);
+        if (currentReservations.isEmpty()) {
+            System.out.println(new MessageBuilder().addErrorMessage("❌ Aucune réservation en cours pour cet email.").build());
+            return;
+        }
+
+        System.out.println("Vos réservations prévues :");
+        for (Document reservation : currentReservations) {
+            System.out.println("ID de réservation : " + reservation.get("Id"));
+            System.out.println("Numéro de la borne associée : " + reservation.get("Id borne"));
+            System.out.println("Immatriculation associée : " + reservation.get("Immatriculation vehicule"));
+            System.out.println("Arrivée prévue : " + reservation.get("Date arrivee") + " à " + reservation.get("Heure arrivee"));
+            System.out.println("Départ prévu : " + reservation.get("Date depart") + " à " + reservation.get("Heure depart"));
+            System.out.println();
+        }
+
+        System.out.print("Veuillez saisir l'ID de réservation à supprimer : ");
+        Integer idReservation = saisieID(scanner, "la réservation");
+
+        // Vérification si l'ID de réservation appartient à cet utilisateur
+        boolean idReservationValide = false;
+        for (Document reservation : currentReservations) {
+            if (reservation.getInteger("Id").equals(idReservation)) {
+                idReservationValide = true;
+                break;
+            }
+        }
+
+        if (idReservationValide) {
+            reservations.supprimer(idReservation);
+            System.out.println(new MessageBuilder().addSuccessMessage("✅ Réservation supprimée avec succès.\n").build());
+        } else {
+            System.out.println(new MessageBuilder().addErrorMessage("❌ L'ID saisi ne correspond à aucune réservation associée à cet email.").build());
         }
     }
 
