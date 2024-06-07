@@ -202,10 +202,11 @@ public class GestionnaireReservationTest {
         assertTrue(sortie.contains(messageAttendu));
     }
 
+
     @Test
     @DisplayName("Ajout d'une réservation avec des données valides")
     public void testAjoutReservationValide() {
-        String saisie = "test@test.com\nB1\n07/06/2024\n10:00\n07/06/2024\n12:00\n123-ABC-01\n";
+        String saisie = "test@test.com\n07/06/2024\n10:00\n07/06/2024\n12:00\nB1\n123-ABC-01\n";
         testerSaisieAjouterReservation(saisie, "✅ Réservation ajoutée avec succès.");
 
         verify(reservations).ajouter(
@@ -220,21 +221,22 @@ public class GestionnaireReservationTest {
         );
     }
 
-
     @Test
-    @DisplayName("Ajout d'une réservation avec une date d'arrivée antérieure à aujourd'hui")
-    public void testAjoutReservationDateArriveeAnterieure() {
-        String saisie = "1\ntest@test.com\nB1\n01/01/2023\n10:00\n07/06/2024\n12:00\nABC123\n";
-        testerSaisieAjouterReservation(saisie, "❌ La date d'arrivée ne peut pas être antérieure à aujourd'hui.");
+    @DisplayName("Ajout d'une réservation avec une heure de départ antérieure à l'heure d'arrivée")
+    public void testAjoutReservationHeureDepartAnterieure() {
+        String saisie = "test@test.com\n07/06/2024\n14:00\n07/06/2024\n12:00\nB1\nABC123\n";
+        testerSaisieAjouterReservation(saisie, "❌ L'heure de départ ne peut pas être antérieure à l'heure d'arrivée.");
         verify(reservations, never()).ajouter(anyInt(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
     }
+
 
     @Test
     @DisplayName("Ajout d'une réservation avec des dates dans un format incorrect")
     public void testAjoutReservationDateFormatIncorrect() {
-        String saisie = "1\ntest@test.com\nB1\n07-06-2024\n10:00\n07-06-2024\n12:00\nABC123\n";
+        String saisie = "test@test.com\n07-06-2024\n10:00\n07-06-2024\n12:00\nB1\nABC123\n";
         testerSaisieAjouterReservation(saisie, "❌ La date d'arrivée est invalide.");
         verify(reservations, never()).ajouter(anyInt(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
     }
+
     // endregion
 }

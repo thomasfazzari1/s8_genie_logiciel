@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static fr.ul.miage.fazzari_chartier_colombana.Util.VerificationsSaisies.saisieEmail;
 import static fr.ul.miage.fazzari_chartier_colombana.Util.VerificationsSaisies.saisieID;
 
 public class GestionnaireReservation {
@@ -37,13 +38,17 @@ public class GestionnaireReservation {
         // Génération automatique de l'ID
         Integer id = reservations.getIdDerniereReservation() + 1;
 
-        System.out.print("Email client : ");
-        if (!scanner.hasNextLine()) return;
-        String email = scanner.nextLine();
-
-        System.out.print("Id borne : ");
-        if (!scanner.hasNextLine()) return;
-        String borne = scanner.nextLine();
+        String email = null;
+        while (true) {
+            System.out.print("Email client : ");
+            if (!scanner.hasNextLine()) return;
+            email = scanner.nextLine();
+            if (!saisieEmail(email)) {
+                System.out.println(new MessageBuilder().addErrorMessage("❌ L'adresse e-mail est invalide.").build());
+            } else {
+                break;
+            }
+        }
 
         LocalDate dateArrivee = null;
         while (true) {
@@ -116,6 +121,13 @@ public class GestionnaireReservation {
                 }
             }
         }
+
+        // Afficher les bornes disponibles pour le créneau choisi
+        afficherBornesDisponibles(dateArrivee, heureArrivee, dateDepart, heureDepart);
+
+        System.out.print("ID de la borne choisie : ");
+        if (!scanner.hasNextLine()) return;
+        String borne = scanner.nextLine();
 
         String immat = null;
         while (true) {
@@ -241,7 +253,39 @@ public class GestionnaireReservation {
         }
     }
 
-    public static void afficherChoixCourant(String choix) {
+    public static void afficherBornesDisponibles(LocalDate dateArrivee, LocalTime heureArrivee, LocalDate dateDepart, LocalTime heureDepart) {
+        ArrayList<Document> toutesLesBornes = bornes.getBornes();
+        ArrayList<Document> reservationsExistantes = reservations.getReservations();
+        ArrayList<Document> bornesDisponibles = new ArrayList<>(toutesLesBornes);
+
+        for (Document reservation : reservationsExistantes) {
+            LocalDate resDateArrivee = LocalDate.parse(reservation.getString("Date arrivee"));
+            LocalTime resHeureArrivee = LocalTime.parse(reservation.getString("Heure arrivee"));
+            LocalDate resDateDepart = LocalDate.parse(reservation.getString("Date depart"));
+            LocalTime resHeureDepart = LocalTime.parse(reservation.getString("Heure depart"));
+
+            boolean isOverlap = !(dateDepart.isBefore(resDateArrivee) || dateArrivee.isAfter(resDateDepart)) &&
+                    !(heureDepart.isBefore(resHeureArrivee) || heureArrivee.isAfter(resHeureDepart));
+
+            if (isOverlap) {
+                String idBorne = reservation.getString("Id borne");
+                bornesDisponibles.removeIf(borne -> borne.getInteger("Id").toString().equals(idBorne));
+            }
+        }
+
+        // Afficher les bornes disponibles
+        if (bornesDisponibles.isEmpty()) {
+            System.out.println(new MessageBuilder().addErrorMessage("Aucune borne disponible pour le créneau choisi.").build());
+        } else {
+            System.out.println("Bornes disponibles pour le créneau choisi :");
+            for (Document borne : bornesDisponibles) {
+                System.out.println("ID Borne: " + borne.getInteger("Id") + " | Emplacement: " + borne.getString("Emplacement"));
+            }
+        }
+
+    }
+
+    private static void afficherChoixCourant(String choix) {
         if (choix.equals(Choix.AJOUT.toString())) {
             System.out.println("╔═════════════════════════════════════╗");
             System.out.println("║ MENU                                ║");
