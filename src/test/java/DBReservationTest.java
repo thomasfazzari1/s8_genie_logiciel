@@ -55,10 +55,10 @@ public class DBReservationTest {
     @Test
     @DisplayName("L'obtention de l'ensemble des contrats de la base fonctionne")
     public void testGetContrats() {
-        ArrayList<Document> mockContrats = new ArrayList<>();
-        when(dbReservation.getContrats()).thenReturn(mockContrats);
+        ArrayList<Document> mockReservations = new ArrayList<>();
+        when(dbReservation.getReservations()).thenReturn(mockReservations);
 
-        assertNotNull(dbReservation.getContrats());
+        assertNotNull(dbReservation.getReservations());
     }
 
     @Test
