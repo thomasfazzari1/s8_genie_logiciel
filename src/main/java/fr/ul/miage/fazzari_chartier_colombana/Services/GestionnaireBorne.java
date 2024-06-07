@@ -3,10 +3,13 @@ package fr.ul.miage.fazzari_chartier_colombana.Services;
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBBorne;
 import fr.ul.miage.fazzari_chartier_colombana.Util.Choix;
 import fr.ul.miage.fazzari_chartier_colombana.Util.MessageBuilder;
+import fr.ul.miage.fazzari_chartier_colombana.Util.VerificationsSaisies;
 import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import static fr.ul.miage.fazzari_chartier_colombana.Util.VerificationsSaisies.saisieID;
 
 public class GestionnaireBorne {
     private static DBBorne bornes = DBBorne.getInstance();
@@ -19,8 +22,8 @@ public class GestionnaireBorne {
     public static void ajouterBorne() {
         Scanner scanner = new Scanner(System.in);
         afficherChoixCourant(Choix.AJOUT.toString());
-        Integer id = saisieID(scanner);
-        String emplacement = saisieEmplacement(scanner);
+        Integer id = saisieID(scanner, "la borne");
+        String emplacement = VerificationsSaisies.saisieEmplacement(scanner);
 
         if (bornes.existe(id)) {
             System.out.println(new MessageBuilder().addErrorMessage("❌ Une borne avec cet identifiant est déjà enregistrée.").build());
@@ -36,7 +39,7 @@ public class GestionnaireBorne {
         while (true) {
             afficherChoixCourant(Choix.SUPPRESSION.toString());
             System.out.print("Saisir l'ID de la borne à supprimer : ");
-            Integer id = saisieID(scanner);
+            Integer id = saisieID(scanner, "la borne");
             if (bornes.existe(id)) {
                 bornes.supprimer(id);
                 System.out.println(new MessageBuilder().addSuccessMessage("✅ Borne supprimée avec succès.").build());
@@ -60,46 +63,6 @@ public class GestionnaireBorne {
         }
     }
 
-    private static Integer saisieID(Scanner scanner) {
-        Integer id = -1;
-
-        while (id.equals(-1)) {
-            System.out.print("Veuillez saisir l'ID de la borne : ");
-            try {
-                String input = scanner.nextLine().trim();
-                if (input.isEmpty()) {
-                    throw new NumberFormatException();
-                }
-                long longId = Long.parseLong(input);
-                if (longId < Integer.MIN_VALUE || longId > Integer.MAX_VALUE) {
-                    System.out.println(new MessageBuilder().addErrorMessage("❌ Veuillez saisir un ID compris entre les limites.").build());
-                } else {
-                    id = (int) longId;
-                    if (id <= 0) {
-                        System.out.println(new MessageBuilder().addErrorMessage("❌ Veuillez saisir un ID valide (nombre entier supérieur à 0).").build());
-                        id = -1;
-                    }
-                }
-            } catch (NumberFormatException e) {
-                System.out.println(new MessageBuilder().addErrorMessage("❌ Veuillez saisir un ID valide (nombre entier supérieur à 0).").build());
-            }
-        }
-        return id;
-    }
-
-    private static String saisieEmplacement(Scanner scanner) {
-        String emplacement = "";
-
-        while (emplacement.isEmpty()) {
-            System.out.print("Veuillez saisir l'emplacement de la borne : ");
-            emplacement = scanner.nextLine().trim();
-            if (emplacement.isEmpty()) {
-                System.out.println(new MessageBuilder().addErrorMessage("❌ L'emplacement de la borne ne peut pas être vide.").build());
-            }
-        }
-        return emplacement;
-    }
-
     public static void afficherChoixCourant(String choix) {
         if (choix.equals(Choix.AJOUT.toString())) {
             System.out.println("╔═════════════════════════════════════╗");
@@ -120,7 +83,6 @@ public class GestionnaireBorne {
             System.out.println("║ MENU                                ║");
             System.out.println("║ └ Afficher la liste des bornes      ║");
             System.out.println("╚═════════════════════════════════════╝");
-            return;
         }
     }
 }

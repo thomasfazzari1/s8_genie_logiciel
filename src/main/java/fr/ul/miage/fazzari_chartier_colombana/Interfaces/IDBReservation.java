@@ -4,12 +4,20 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 
-public interface IDBContrat {
+public interface IDBReservation {
     void ajouter(Integer id, String email, String borne, String dateA, String heureA, String dateD, String heureD, String immat);
 
     void supprimer(Integer id);
 
-    ArrayList<Document> getContrats();
+    void checkArrivee(Integer id);
+
+    void checkDepart(Integer id);
+
+    ArrayList<Document> getReservations();
 
     boolean existe(Integer id);
+
+    ArrayList<Document> getReservationsAVenirDuClient(String email);
+
+    Integer getIdDerniereReservation();
 }

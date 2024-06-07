@@ -1,6 +1,7 @@
 package fr.ul.miage.fazzari_chartier_colombana;
 
 import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireBorne;
+import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireReservation;
 import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireVehicule;
 import fr.ul.miage.fazzari_chartier_colombana.Util.MessageBuilder;
 
@@ -46,10 +47,19 @@ public class Main {
                     GestionnaireBorne.supprimerBorne();
                     break;
                 case "11":
+                    GestionnaireReservation.afficherReservations();
                     break;
                 case "12":
+                    GestionnaireReservation.ajouterReservation();
                     break;
                 case "13":
+                    GestionnaireReservation.supprimerReservation();
+                    break;
+                case "14":
+                    GestionnaireReservation.checkingArrivee();
+                    break;
+                case "15":
+                    GestionnaireReservation.checkingDepart();
                     break;
                 default:
                     System.out.println(new MessageBuilder().addErrorMessage("Saisie incorrecte.").build());
@@ -59,28 +69,30 @@ public class Main {
     }
 
     private static void afficherMenu() {
-        System.out.println("╔══════════════════════════════════════╗");
-        System.out.println("║                 MENU                 ║");
-        System.out.println("╠══════════════════════════════════════╣");
-        System.out.println("║ 1. Afficher la liste des clients     ║");
-        System.out.println("║ 2. Ajouter un client                 ║");
-        System.out.println("║ 3. Supprimer un client               ║");
-        System.out.println("║ ------------------------------------ ║");
-        System.out.println("║ 4. Afficher la liste des véhicules   ║");
-        System.out.println("║ 5. Ajouter un véhicule à un client   ║");
-        System.out.println("║ 6. Supprimer un véhicule à un client ║");
-        System.out.println("║ ------------------------------------ ║");
-        System.out.println("║ 7. Afficher la liste des bornes      ║");
-        System.out.println("║ 8. Rechercher une borne disponible   ║");
-        System.out.println("║ 9. Ajouter une borne                 ║");
-        System.out.println("║ 10. Supprimer une borne              ║");
-        System.out.println("║ ------------------------------------ ║");
-        System.out.println("║ 11. Afficher la liste des contrats   ║");
-        System.out.println("║ 12. Ajouter un contrat               ║");
-        System.out.println("║ 13. Supprimer un contrat             ║");
-        System.out.println("║ ------------------------------------ ║");
-        System.out.println("║ 0. Quitter                           ║");
-        System.out.println("╚══════════════════════════════════════╝");
+        System.out.println("╔════════════════════════════════════════╗");
+        System.out.println("║                  MENU                  ║");
+        System.out.println("╠════════════════════════════════════════╣");
+        System.out.println("║ 1. Afficher la liste des clients       ║");
+        System.out.println("║ 2. Ajouter un client                   ║");
+        System.out.println("║ 3. Supprimer un client                 ║");
+        System.out.println("║ -------------------------------------- ║");
+        System.out.println("║ 4. Afficher la liste des véhicules     ║");
+        System.out.println("║ 5. Ajouter un véhicule à un client     ║");
+        System.out.println("║ 6. Supprimer un véhicule à un client   ║");
+        System.out.println("║ -------------------------------------- ║");
+        System.out.println("║ 7. Afficher la liste des bornes        ║");
+        System.out.println("║ 8. Rechercher une borne disponible     ║");
+        System.out.println("║ 9. Ajouter une borne                   ║");
+        System.out.println("║ 10. Supprimer une borne                ║");
+        System.out.println("║ ------------------------------------   ║");
+        System.out.println("║ 11. Afficher la liste des réservations ║");
+        System.out.println("║ 12. Ajouter une réservation            ║");
+        System.out.println("║ 13. Supprimer une réservation          ║");
+        System.out.println("║ 14. Checking d'arrivée                 ║");
+        System.out.println("║ 15. Checking de départ                 ║");
+        System.out.println("║ -------------------------------------- ║");
+        System.out.println("║ 0. Quitter                             ║");
+        System.out.println("╚════════════════════════════════════════╝");
         System.out.print("Saisissez votre choix : ");
     }
 }

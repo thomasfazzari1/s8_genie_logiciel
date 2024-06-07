@@ -3,10 +3,11 @@ package fr.ul.miage.fazzari_chartier_colombana.Services;
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBClient;
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBVehicule;
 import fr.ul.miage.fazzari_chartier_colombana.Util.Choix;
-import fr.ul.miage.fazzari_chartier_colombana.Util.Immatriculations;
 import fr.ul.miage.fazzari_chartier_colombana.Util.MessageBuilder;
 
 import java.util.Scanner;
+
+import static fr.ul.miage.fazzari_chartier_colombana.Util.Immatriculations.plaqueValide;
 
 public class GestionnaireVehicule {
     private static DBVehicule vehicules = DBVehicule.getInstance();
@@ -48,10 +49,6 @@ public class GestionnaireVehicule {
             }
         }
         return email;
-    }
-
-    private static boolean plaqueValide(String plaque) {
-        return Immatriculations.PLAQUE_PATTERN.matcher(plaque).matches();
     }
 
     private static void afficherChoixCourant(String choix) {
