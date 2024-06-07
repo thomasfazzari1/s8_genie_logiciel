@@ -1,6 +1,7 @@
 package fr.ul.miage.fazzari_chartier_colombana;
 
 import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireBorne;
+import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireReservation;
 import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireVehicule;
 import fr.ul.miage.fazzari_chartier_colombana.Util.MessageBuilder;
 
@@ -51,6 +52,12 @@ public class Main {
                     break;
                 case "13":
                     break;
+                case "14":
+                    GestionnaireReservation.checkingArrivee();
+                    break;
+                case "15":
+                    GestionnaireReservation.checkingDepart();
+                    break;
                 default:
                     System.out.println(new MessageBuilder().addErrorMessage("Saisie incorrecte.").build());
                     break;
@@ -78,6 +85,8 @@ public class Main {
         System.out.println("║ 11. Afficher la liste des contrats   ║");
         System.out.println("║ 12. Ajouter un contrat               ║");
         System.out.println("║ 13. Supprimer un contrat             ║");
+        System.out.println("║ 14. Checking d'arrivée               ║");
+        System.out.println("║ 15. Checking de départ               ║");
         System.out.println("║ ------------------------------------ ║");
         System.out.println("║ 0. Quitter                           ║");
         System.out.println("╚══════════════════════════════════════╝");

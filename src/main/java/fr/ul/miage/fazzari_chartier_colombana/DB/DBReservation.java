@@ -69,4 +69,14 @@ public class DBReservation implements IDBReservation {
         Bson filter = Filters.eq("Id", id);
         return reservations.find(filter).first() != null;
     }
+
+    @Override
+    public ArrayList<Document> getReservationsAVenirDuClient(String email) {
+        Bson filter = Filters.and(
+                Filters.eq("Email client", email),
+                Filters.eq("Checking depart", false)
+        );
+        return reservations.find(filter).into(new ArrayList<>());
+    }
+
 }
