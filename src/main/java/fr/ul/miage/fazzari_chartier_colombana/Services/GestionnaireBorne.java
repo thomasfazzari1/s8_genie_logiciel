@@ -2,6 +2,7 @@ package fr.ul.miage.fazzari_chartier_colombana.Services;
 
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBBorne;
 
+import fr.ul.miage.fazzari_chartier_colombana.Util.Choix;
 import org.bson.Document;
 
 import java.util.ArrayList;

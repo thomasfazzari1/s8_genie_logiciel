@@ -127,11 +127,11 @@ public class GestionnaireVehiculeTest {
 
         String[] plaquesValides = {
                 "AB-123-CD",  // Format français (Nouveau)
-                "AB-123-CD",  // Format français (Ancien)
+                "123-ABC-52",  // Format français (Ancien)
                 "A-1234-BC",  // Format allemand / britannique
                 "12-ABC-345", // Format italien
                 "12-ABC-345", // Format espagnol
-                "ABC12",      // Format luxembourgeois
+                "ABC1234",      // Format luxembourgeois
                 "AB12CDE",    // Format néerlandais
                 "A1234BC",    // Format belge
                 "1234AB",     // Format suisse

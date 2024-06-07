@@ -1,4 +1,4 @@
-package fr.ul.miage.fazzari_chartier_colombana.Services;
+package fr.ul.miage.fazzari_chartier_colombana.Util;
 
 public enum Choix {
     AJOUT,
