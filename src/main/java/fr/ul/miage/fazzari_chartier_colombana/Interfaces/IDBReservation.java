@@ -4,7 +4,7 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 
-public interface IDBContrat {
+public interface IDBReservation {
     void ajouter(Integer id, String email, String borne, String dateA, String heureA, String dateD, String heureD, String immat);
 
     void supprimer(Integer id);

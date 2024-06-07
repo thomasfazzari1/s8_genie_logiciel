@@ -1,7 +1,7 @@
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import fr.ul.miage.fazzari_chartier_colombana.DB.DBContrat;
+import fr.ul.miage.fazzari_chartier_colombana.DB.DBReservation;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class DBContratTest {
 
     @Mock
-    private DBContrat dbContrat;
+    private DBReservation dbContrat;
 
     @BeforeEach
     public void setUp() {

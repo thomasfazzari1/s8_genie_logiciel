@@ -3,23 +3,23 @@ package fr.ul.miage.fazzari_chartier_colombana.DB;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import fr.ul.miage.fazzari_chartier_colombana.Interfaces.IDBContrat;
+import fr.ul.miage.fazzari_chartier_colombana.Interfaces.IDBReservation;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 
-public class DBContrat implements IDBContrat {
-    private static DBContrat instance;
+public class DBReservation implements IDBReservation {
+    private static DBReservation instance;
     private static MongoDatabase database = DBConfiguration.getDatabase();
     private static MongoCollection<Document> contrats = database.getCollection("Contrats");
 
-    private DBContrat() {
+    private DBReservation() {
     }
 
-    public static DBContrat getInstance() {
+    public static DBReservation getInstance() {
         if (instance == null) {
-            instance = new DBContrat();
+            instance = new DBReservation();
         }
         return instance;
     }
@@ -35,6 +35,8 @@ public class DBContrat implements IDBContrat {
                 .append("Date depart", dateD)
                 .append("Heure depart", heureD)
                 .append("Immatriculation vehicule", immat)
+                .append("Checking arrivee", false)
+                .append("Checking depart", false)
         );
     }
 
