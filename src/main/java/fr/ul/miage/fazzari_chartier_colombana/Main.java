@@ -1,6 +1,8 @@
 package fr.ul.miage.fazzari_chartier_colombana;
 
 import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireBorne;
+import fr.ul.miage.fazzari_chartier_colombana.Services.GestionnaireVehicule;
+import fr.ul.miage.fazzari_chartier_colombana.Util.MessageBuilder;
 
 import java.util.Scanner;
 
@@ -16,7 +18,7 @@ public class Main {
             System.out.println();
             switch (choix) {
                 case "0":
-                    System.out.println("Au revoir !");
+                    System.out.println(new MessageBuilder().addSuccessMessage("Au revoir !").build());
                     programme = false;
                     break;
                 case "1":
@@ -28,6 +30,7 @@ public class Main {
                 case "4":
                     break;
                 case "5":
+                    GestionnaireVehicule.ajouterVehicule();
                     break;
                 case "6":
                     break;
@@ -49,7 +52,7 @@ public class Main {
                 case "13":
                     break;
                 default:
-                    System.out.println("Saisie incorrecte.");
+                    System.out.println(new MessageBuilder().addErrorMessage("Saisie incorrecte.").build());
                     break;
             }
         }

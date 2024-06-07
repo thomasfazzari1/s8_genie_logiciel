@@ -4,6 +4,7 @@ import fr.ul.miage.fazzari_chartier_colombana.DB.DBClient;
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBVehicule;
 import fr.ul.miage.fazzari_chartier_colombana.Util.Choix;
 import fr.ul.miage.fazzari_chartier_colombana.Util.Immatriculations;
+import fr.ul.miage.fazzari_chartier_colombana.Util.MessageBuilder;
 
 import java.util.Scanner;
 
@@ -27,9 +28,9 @@ public class GestionnaireVehicule {
 
         if (plaqueValide(immat)) {
             vehicules.ajouter(email, immat);
-            System.out.println("✅ Véhicule ajouté avec succès.");
+            System.out.println(new MessageBuilder().addSuccessMessage("✅ Véhicule ajouté avec succès.").build());
         } else {
-            System.out.println("❌ Plaque d'immatriculation invalide.");
+            System.out.println(new MessageBuilder().addErrorMessage("❌ Plaque d'immatriculation invalide.").build());
         }
     }
 
@@ -43,7 +44,7 @@ public class GestionnaireVehicule {
             if (clients.existe(email)) {
                 boucle = false;
             } else {
-                System.out.println("❌ Aucun utilisateur n'est associé à cet email.");
+                System.out.println(new MessageBuilder().addErrorMessage("❌ Aucun utilisateur n'est associé à cet email.").build());
             }
         }
         return email;

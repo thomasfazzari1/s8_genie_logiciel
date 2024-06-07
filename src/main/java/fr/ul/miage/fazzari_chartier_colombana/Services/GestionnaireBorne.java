@@ -1,8 +1,8 @@
 package fr.ul.miage.fazzari_chartier_colombana.Services;
 
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBBorne;
-
 import fr.ul.miage.fazzari_chartier_colombana.Util.Choix;
+import fr.ul.miage.fazzari_chartier_colombana.Util.MessageBuilder;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -23,10 +23,10 @@ public class GestionnaireBorne {
         String emplacement = saisieEmplacement(scanner);
 
         if (bornes.existe(id)) {
-            System.out.println("❌ Une borne avec cet identifiant est déjà enregistrée.");
+            System.out.println(new MessageBuilder().addErrorMessage("❌ Une borne avec cet identifiant est déjà enregistrée.").build());
         } else {
             bornes.ajouter(id, emplacement);
-            System.out.println("✅ Borne ajoutée avec succès.");
+            System.out.println(new MessageBuilder().addSuccessMessage("✅ Borne ajoutée avec succès.").build());
         }
     }
 
@@ -39,10 +39,10 @@ public class GestionnaireBorne {
             Integer id = saisieID(scanner);
             if (bornes.existe(id)) {
                 bornes.supprimer(id);
-                System.out.println("✅ Borne supprimée avec succès.\n");
+                System.out.println(new MessageBuilder().addSuccessMessage("✅ Borne supprimée avec succès.").build());
                 break;
             } else {
-                System.out.println("❌ Aucune borne avec cet identifiant n'a été trouvée.");
+                System.out.println(new MessageBuilder().addErrorMessage("❌ Aucune borne avec cet identifiant n'a été trouvée.").build());
             }
         }
     }
@@ -50,7 +50,7 @@ public class GestionnaireBorne {
     public static void afficherBornes() {
         ArrayList<Document> allBornes = bornes.getBornes();
         if (allBornes.isEmpty()) {
-            System.out.println("❌ Aucune borne enregistrée.");
+            System.out.println(new MessageBuilder().addErrorMessage("❌ Aucune borne enregistrée.").build());
         } else {
             for (Document borne : allBornes) {
                 System.out.println("Id : " + borne.get("Id").toString());
@@ -72,16 +72,16 @@ public class GestionnaireBorne {
                 }
                 long longId = Long.parseLong(input);
                 if (longId < Integer.MIN_VALUE || longId > Integer.MAX_VALUE) {
-                    System.out.println("❌ Veuillez saisir un ID compris entre les limites.");
+                    System.out.println(new MessageBuilder().addErrorMessage("❌ Veuillez saisir un ID compris entre les limites.").build());
                 } else {
                     id = (int) longId;
                     if (id <= 0) {
-                        System.out.println("❌ Veuillez saisir un ID valide (nombre entier supérieur à 0).");
+                        System.out.println(new MessageBuilder().addErrorMessage("❌ Veuillez saisir un ID valide (nombre entier supérieur à 0).").build());
                         id = -1;
                     }
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Veuillez saisir un ID valide (nombre entier supérieur à 0).");
+                System.out.println(new MessageBuilder().addErrorMessage("❌ Veuillez saisir un ID valide (nombre entier supérieur à 0).").build());
             }
         }
         return id;
@@ -94,7 +94,7 @@ public class GestionnaireBorne {
             System.out.print("Veuillez saisir l'emplacement de la borne : ");
             emplacement = scanner.nextLine().trim();
             if (emplacement.isEmpty()) {
-                System.out.println("❌ L'emplacement de la borne ne peut pas être vide.");
+                System.out.println(new MessageBuilder().addErrorMessage("❌ L'emplacement de la borne ne peut pas être vide.").build());
             }
         }
         return emplacement;
