@@ -13,7 +13,7 @@ public interface IDBReservation {
 
     void checkDepart(Integer id);
 
-    ArrayList<Document> getContrats();
+    ArrayList<Document> getReservations();
 
     boolean existe(Integer id);
 }

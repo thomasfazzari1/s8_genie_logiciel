@@ -60,7 +60,7 @@ public class DBReservation implements IDBReservation {
     }
 
     @Override
-    public ArrayList<Document> getContrats() {
+    public ArrayList<Document> getReservations() {
         return reservations.find().into(new ArrayList<>());
     }
 
