@@ -28,12 +28,8 @@ public class GestionnaireReservation {
     public static void ajouterReservation() {
         afficherChoixCourant(Choix.AJOUT.toString());
         Scanner scanner = new Scanner(System.in);
-        boolean boucle = true; Integer id = 0;
-        while (boucle) {
-            id = saisieID(scanner, "la borne");
-            if (bornes.existe(id)) System.out.println(new MessageBuilder().addErrorMessage("❌ Une borne est déjà associée à cet id.").build());
-            else boucle = false;
-        }
+        boolean boucle = true;
+        Integer id = saisieID(scanner, "la réservation");
         System.out.print("Email client : ");
         String email = scanner.nextLine();
         System.out.print("Id borne : ");
@@ -75,7 +71,11 @@ public class GestionnaireReservation {
                 else {
                     LocalTime heureArrivee = LocalTime.of(hour, minute);
                     LocalTime heureActuelle = LocalTime.now();
-                    if (heureArrivee.isBefore(heureActuelle)) System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure d'arrivée ne peut pas être antérieure à l'heure actuelle.").build());
+                    String[] dateParts = dateA.split("/");
+                    int jj = Integer.parseInt(dateParts[0]);
+                    int mm = Integer.parseInt(dateParts[1]);
+                    int aaaa = Integer.parseInt(dateParts[2]);
+                    if (LocalDate.of(aaaa, mm, jj).equals(LocalDate.now()) && heureArrivee.isBefore(heureActuelle)) System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure d'arrivée ne peut pas être antérieure à l'heure actuelle.").build());
                     else boucle = false;
                 }
             }
