@@ -16,4 +16,6 @@ public interface IDBReservation {
     ArrayList<Document> getReservations();
 
     boolean existe(Integer id);
+
+    ArrayList<Document> getReservationsAVenirDuClient(String email);
 }

@@ -55,6 +55,12 @@ public class Main {
                 case "13":
                     GestionnaireReservation.supprimerReservation();
                     break;
+                case "14":
+                    GestionnaireReservation.checkingArrivee();
+                    break;
+                case "15":
+                    GestionnaireReservation.checkingDepart();
+                    break;
                 default:
                     System.out.println(new MessageBuilder().addErrorMessage("Saisie incorrecte.").build());
                     break;
@@ -82,6 +88,8 @@ public class Main {
         System.out.println("║ 11. Afficher la liste des réservations ║");
         System.out.println("║ 12. Ajouter une réservation            ║");
         System.out.println("║ 13. Supprimer une réservation          ║");
+        System.out.println("║ 14. Checking d'arrivée                 ║");
+        System.out.println("║ 15. Checking de départ                 ║");
         System.out.println("║ -------------------------------------- ║");
         System.out.println("║ 0. Quitter                             ║");
         System.out.println("╚════════════════════════════════════════╝");
