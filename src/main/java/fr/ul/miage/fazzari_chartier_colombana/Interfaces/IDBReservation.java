@@ -18,4 +18,6 @@ public interface IDBReservation {
     boolean existe(Integer id);
 
     ArrayList<Document> getReservationsAVenirDuClient(String email);
+
+    Integer getIdDerniereReservation();
 }

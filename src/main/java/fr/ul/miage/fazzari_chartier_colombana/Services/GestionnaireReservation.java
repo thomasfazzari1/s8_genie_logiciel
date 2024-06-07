@@ -3,17 +3,18 @@ package fr.ul.miage.fazzari_chartier_colombana.Services;
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBBorne;
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBReservation;
 import fr.ul.miage.fazzari_chartier_colombana.Util.Choix;
+import fr.ul.miage.fazzari_chartier_colombana.Util.DateEtHeures;
 import fr.ul.miage.fazzari_chartier_colombana.Util.MessageBuilder;
 import org.bson.Document;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
-import java.time.Year;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static fr.ul.miage.fazzari_chartier_colombana.Util.Immatriculations.plaqueValide;
 import static fr.ul.miage.fazzari_chartier_colombana.Util.VerificationsSaisies.saisieID;
 
 public class GestionnaireReservation {
@@ -32,124 +33,96 @@ public class GestionnaireReservation {
     public static void ajouterReservation() {
         afficherChoixCourant(Choix.AJOUT.toString());
         Scanner scanner = new Scanner(System.in);
-        boolean boucle = true;
-        Integer id = saisieID(scanner, "la réservation");
+
+        // Génération automatique de l'ID
+        Integer id = reservations.getIdDerniereReservation() + 1;
+
         System.out.print("Email client : ");
         String email = scanner.nextLine();
         System.out.print("Id borne : ");
         String borne = scanner.nextLine();
-        boucle = true;
-        String dateA = null;
+
         LocalDate dateArrivee = null;
-        while (boucle) {
+        while (true) {
             System.out.print("Date d'arrivée (format jj/mm/aaaa) : ");
-            dateA = scanner.nextLine();
-            if (!dateA.matches("^\\d{2}/\\d{2}/\\d{4}$"))
-                System.out.println(new MessageBuilder().addErrorMessage("❌ La date ne respecte pas le format jj/mm/aaaa.").build());
-            else {
-                String[] dateParts = dateA.split("/");
-                int jj = Integer.parseInt(dateParts[0]);
-                int mm = Integer.parseInt(dateParts[1]);
-                int aaaa = Integer.parseInt(dateParts[2]);
-                if (mm < 1 || mm > 12)
-                    System.out.println(new MessageBuilder().addErrorMessage("❌ Le mois doit être compris entre 1 et 12.").build());
-                else {
-                    int jourMaxDuMois = Month.of(mm).length(Year.isLeap(aaaa));
-                    if (jj < 1 || jj > jourMaxDuMois)
-                        System.out.println(new MessageBuilder().addErrorMessage("❌ Le jour doit être compris entre 1 et " + jourMaxDuMois + " pour le mois spécifié.").build());
-                    else {
-                        dateArrivee = LocalDate.of(aaaa, mm, jj);
-                        LocalDate aujourdhui = LocalDate.now();
-                        if (dateArrivee.isBefore(aujourdhui))
-                            System.out.println(new MessageBuilder().addErrorMessage("❌ La date ne peut pas être antérieure à la date d'aujourd'hui.").build());
-                        else boucle = false;
-                    }
+            String dateA = scanner.nextLine();
+            if (!DateEtHeures.dateValide(dateA)) {
+                System.out.println(new MessageBuilder().addErrorMessage("❌ La date d'arrivée est invalide.").build());
+            } else {
+                dateArrivee = DateEtHeures.parseDate(dateA);
+                if (dateArrivee.isBefore(LocalDate.now())) {
+                    System.out.println(new MessageBuilder().addErrorMessage("❌ La date d'arrivée ne peut pas être antérieure à aujourd'hui.").build());
+                } else {
+                    break;
                 }
             }
         }
-        boucle = true;
-        String heureA = null;
-        while (boucle) {
+
+        LocalTime heureArrivee = null;
+        while (true) {
             System.out.print("Heure d'arrivée (format hh:mm) : ");
-            heureA = scanner.nextLine();
-            if (!heureA.matches("^\\d{2}:\\d{2}$"))
+            String heureA = scanner.nextLine();
+            if (!DateEtHeures.HEURE_PATTERN.matcher(heureA).matches()) {
                 System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure d'arrivée ne respecte pas le format hh:mm.").build());
-            else {
-                String[] tpsDecomp = heureA.split(":");
-                int hour = Integer.parseInt(tpsDecomp[0]);
-                int minute = Integer.parseInt(tpsDecomp[1]);
-                if (hour < 0 || hour > 23 || minute < 0 || minute > 59)
-                    System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure d'arrivée doit être comprise entre 00:00 et 23:59.").build());
-                else {
-                    LocalTime heureArrivee = LocalTime.of(hour, minute);
-                    LocalTime heureActuelle = LocalTime.now();
-                    String[] dateParts = dateA.split("/");
-                    int jj = Integer.parseInt(dateParts[0]);
-                    int mm = Integer.parseInt(dateParts[1]);
-                    int aaaa = Integer.parseInt(dateParts[2]);
-                    if (LocalDate.of(aaaa, mm, jj).equals(LocalDate.now()) && heureArrivee.isBefore(heureActuelle))
-                        System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure d'arrivée ne peut pas être antérieure à l'heure actuelle.").build());
-                    else boucle = false;
+            } else {
+                try {
+                    heureArrivee = DateEtHeures.parseTime(heureA);
+                    break;
+                } catch (DateTimeParseException e) {
+                    System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure d'arrivée est invalide.").build());
                 }
             }
         }
-        boucle = true;
-        String dateD = null;
+
         LocalDate dateDepart = null;
-        while (boucle) {
+        while (true) {
             System.out.print("Date de départ (format jj/mm/aaaa) : ");
-            dateD = scanner.nextLine();
-            if (!dateD.matches("^\\d{2}/\\d{2}/\\d{4}$"))
-                System.out.println(new MessageBuilder().addErrorMessage("❌ La date ne respecte pas le format jj/mm/aaaa.").build());
-            else {
-                String[] dateParts = dateD.split("/");
-                int jj = Integer.parseInt(dateParts[0]);
-                int mm = Integer.parseInt(dateParts[1]);
-                int aaaa = Integer.parseInt(dateParts[2]);
-                if (mm < 1 || mm > 12)
-                    System.out.println(new MessageBuilder().addErrorMessage("❌ Le mois doit être compris entre 1 et 12.").build());
-                else {
-                    int jourMaxDuMois = Month.of(mm).length(Year.isLeap(aaaa));
-                    if (jj < 1 || jj > jourMaxDuMois)
-                        System.out.println(new MessageBuilder().addErrorMessage("❌ Le jour doit être compris entre 1 et " + jourMaxDuMois + " pour le mois spécifié.").build());
-                    else {
-                        dateDepart = LocalDate.of(aaaa, mm, jj);
-                        if (dateDepart.isBefore(dateArrivee))
-                            System.out.println(new MessageBuilder().addErrorMessage("❌ La date de départ ne peut pas être antérieure à la date d'arrivée.").build());
-                        else if (dateDepart.isAfter(dateArrivee.plusDays(1)))
-                            System.out.println(new MessageBuilder().addSuccessMessage("❌ La date de départ doit être au plus tard le lendemain de la date d'arrivée.").build());
-                        else boucle = false;
-                    }
+            String dateD = scanner.nextLine();
+            if (!DateEtHeures.dateValide(dateD)) {
+                System.out.println(new MessageBuilder().addErrorMessage("❌ La date de départ est invalide.").build());
+            } else {
+                dateDepart = DateEtHeures.parseDate(dateD);
+                if (dateDepart.isBefore(dateArrivee)) {
+                    System.out.println(new MessageBuilder().addErrorMessage("❌ La date de départ ne peut pas être antérieure à la date d'arrivée.").build());
+                } else {
+                    break;
                 }
             }
         }
-        boucle = true;
-        String heureD = null;
-        while (boucle) {
+
+        LocalTime heureDepart = null;
+        while (true) {
             System.out.print("Heure de départ (format hh:mm) : ");
-            heureD = scanner.nextLine();
-            if (!heureD.matches("^\\d{2}:\\d{2}$"))
+            String heureD = scanner.nextLine();
+            if (!DateEtHeures.HEURE_PATTERN.matcher(heureD).matches()) {
                 System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure de départ ne respecte pas le format hh:mm.").build());
-            else {
-                String[] tpsDecomp = heureD.split(":");
-                int heure = Integer.parseInt(tpsDecomp[0]);
-                int minute = Integer.parseInt(tpsDecomp[1]);
-                if (heure < 0 || heure > 23 || minute < 0 || minute > 59)
-                    System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure de départ doit être comprise entre 00:00 et 23:59.").build());
-                else {
-                    LocalTime heureDepart = LocalTime.parse(heureD);
-                    LocalTime heureArrivee = LocalTime.parse(heureA);
-                    System.out.println(heureDepart + " " + heureArrivee);
-                    if (dateA.equals(dateD) && heureDepart.isBefore(heureArrivee))
+            } else {
+                try {
+                    heureDepart = DateEtHeures.parseTime(heureD);
+                    if (dateArrivee.equals(dateDepart) && heureDepart.isBefore(heureArrivee)) {
                         System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure de départ ne peut pas être antérieure à l'heure d'arrivée.").build());
-                    else boucle = false;
+                    } else {
+                        break;
+                    }
+                } catch (DateTimeParseException e) {
+                    System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure de départ est invalide.").build());
                 }
             }
         }
-        System.out.print("Immatriculation du véhicule : ");
-        String immat = scanner.nextLine();
-        reservations.ajouter(id, email, borne, dateA, heureA, dateD, heureD, immat);
-        System.out.println(new MessageBuilder().addSuccessMessage("✅ Contrat ajouté avec succès.\n").build());
+
+        String immat = null;
+        while (true) {
+            System.out.print("Immatriculation du véhicule : ");
+            immat = scanner.nextLine();
+            if (!plaqueValide(immat)) {
+                System.out.println(new MessageBuilder().addErrorMessage("❌ L'immatriculation du véhicule est invalide.").build());
+            } else {
+                break;
+            }
+        }
+
+        reservations.ajouter(id, email, borne, dateArrivee.toString(), heureArrivee.toString(), dateDepart.toString(), heureDepart.toString(), immat);
+        System.out.println(new MessageBuilder().addSuccessMessage("✅ Réservation ajoutée avec succès.\n").build());
     }
 
     public static void supprimerReservation() {
@@ -160,19 +133,20 @@ public class GestionnaireReservation {
             Integer id = saisieID(scanner, "la réservation");
             if (reservations.existe(id)) {
                 reservations.supprimer(id);
-                System.out.println(new MessageBuilder().addSuccessMessage("✅ Contrat supprimée avec succès.\n").build());
+                System.out.println(new MessageBuilder().addSuccessMessage("✅ Réservation supprimée avec succès.\n").build());
                 boucle = false;
             } else
-                System.out.println(new MessageBuilder().addErrorMessage("❌ Aucun contrat n'est associée à cet id.").build());
+                System.out.println(new MessageBuilder().addErrorMessage("❌ Aucune réservation n'est associée à cet id.").build());
         }
     }
 
     public static void afficherReservations() {
-        List<Document> contrats = reservations.getReservations();
-        if (contrats.isEmpty()) System.out.println(new MessageBuilder().addErrorMessage("❌ Aucun contrat enregistré."));
+        List<Document> reservationsList = reservations.getReservations();
+        if (reservationsList.isEmpty())
+            System.out.println(new MessageBuilder().addErrorMessage("❌ Aucune réservation enregistrée."));
         else {
-            for (Document doc : contrats) {
-                System.out.println("Id contrat : " + doc.getString("Id contrat"));
+            for (Document doc : reservationsList) {
+                System.out.println("Id réservation : " + doc.getString("Id"));
                 System.out.println("Email client : " + doc.getString("Email client"));
                 System.out.println("Id borne : " + doc.getString("Id borne"));
                 System.out.println("Arrivée : le " + doc.getString("Date arrivee") + " à " + doc.getString("Heure arrivee"));

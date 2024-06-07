@@ -24,5 +24,10 @@ public class Immatriculations {
                     "\\d{4}[A-Z]{2}" +              // Format suisse
                     "|" +
                     "\\d{2}-\\d{2}-\\d{2}" +        // Format norvégien
-                    ")$");
+                    ")$"
+    );
+
+    public static boolean plaqueValide(String plaque) {
+        return Immatriculations.PLAQUE_PATTERN.matcher(plaque).matches();
+    }
 }

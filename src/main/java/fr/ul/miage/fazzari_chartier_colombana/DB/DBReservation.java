@@ -79,4 +79,10 @@ public class DBReservation implements IDBReservation {
         return reservations.find(filter).into(new ArrayList<>());
     }
 
+    @Override
+    public Integer getIdDerniereReservation() {
+        Document lastReservation = reservations.find().sort(new Document("Id", -1)).first();
+        return lastReservation != null ? lastReservation.getInteger("Id") : 0;
+    }
+
 }
