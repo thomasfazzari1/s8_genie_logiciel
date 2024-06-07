@@ -2,6 +2,7 @@ package fr.ul.miage.fazzari_chartier_colombana.Services;
 
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBBorne;
 
+import fr.ul.miage.fazzari_chartier_colombana.Util.Choix;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -13,12 +14,6 @@ public class GestionnaireBorne {
     // Constructeur pour les injections de dépendances (Mocks GestionnaireBorneTest)
     public GestionnaireBorne(DBBorne dbBorne) {
         bornes = dbBorne;
-    }
-
-    private enum Choix {
-        AJOUT,
-        SUPPRESSION,
-        AFFICHAGE
     }
 
     public static void ajouterBorne() {
