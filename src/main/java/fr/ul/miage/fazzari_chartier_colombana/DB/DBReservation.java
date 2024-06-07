@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class DBReservation implements IDBReservation {
     private static DBReservation instance;
     private static MongoDatabase database = DBConfiguration.getDatabase();
-    private static MongoCollection<Document> contrats = database.getCollection("Contrats");
+    private static MongoCollection<Document> reservations = database.getCollection("Reservations");
 
     private DBReservation() {
     }
@@ -26,7 +26,7 @@ public class DBReservation implements IDBReservation {
 
     @Override
     public void ajouter(Integer id, String email, String borne, String dateA, String heureA, String dateD, String heureD, String immat) {
-        contrats.insertOne(new Document()
+        reservations.insertOne(new Document()
                 .append("Id", id)
                 .append("Email client", email)
                 .append("Id borne", borne)
@@ -42,17 +42,31 @@ public class DBReservation implements IDBReservation {
 
     @Override
     public void supprimer(Integer id) {
-        contrats.deleteOne(new Document("Id", id));
+        reservations.deleteOne(new Document("Id", id));
+    }
+
+    @Override
+    public void checkArrivee(Integer id) {
+        Bson filter = Filters.eq("Id", id);
+        Bson update = new Document("$set", new Document("Checking arrivee", true));
+        reservations.updateOne(filter, update);
+    }
+
+    @Override
+    public void checkDepart(Integer id) {
+        Bson filter = Filters.eq("Id", id);
+        Bson update = new Document("$set", new Document("Checking depart", true));
+        reservations.updateOne(filter, update);
     }
 
     @Override
     public ArrayList<Document> getContrats() {
-        return contrats.find().into(new ArrayList<>());
+        return reservations.find().into(new ArrayList<>());
     }
 
     @Override
     public boolean existe(Integer id) {
         Bson filter = Filters.eq("Id", id);
-        return contrats.find(filter).first() != null;
+        return reservations.find(filter).first() != null;
     }
 }

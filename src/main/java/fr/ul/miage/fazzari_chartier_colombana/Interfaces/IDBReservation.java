@@ -9,6 +9,10 @@ public interface IDBReservation {
 
     void supprimer(Integer id);
 
+    void checkArrivee(Integer id);
+
+    void checkDepart(Integer id);
+
     ArrayList<Document> getContrats();
 
     boolean existe(Integer id);
