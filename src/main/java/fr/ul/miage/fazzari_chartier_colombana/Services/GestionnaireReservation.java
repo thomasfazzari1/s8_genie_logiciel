@@ -4,6 +4,7 @@ import fr.ul.miage.fazzari_chartier_colombana.DB.DBBorne;
 import fr.ul.miage.fazzari_chartier_colombana.DB.DBReservation;
 import fr.ul.miage.fazzari_chartier_colombana.Util.Choix;
 import fr.ul.miage.fazzari_chartier_colombana.Util.DateEtHeures;
+import fr.ul.miage.fazzari_chartier_colombana.Util.Immatriculations;
 import fr.ul.miage.fazzari_chartier_colombana.Util.MessageBuilder;
 import org.bson.Document;
 
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static fr.ul.miage.fazzari_chartier_colombana.Util.Immatriculations.plaqueValide;
 import static fr.ul.miage.fazzari_chartier_colombana.Util.VerificationsSaisies.saisieID;
 
 public class GestionnaireReservation {
@@ -38,13 +38,17 @@ public class GestionnaireReservation {
         Integer id = reservations.getIdDerniereReservation() + 1;
 
         System.out.print("Email client : ");
+        if (!scanner.hasNextLine()) return;
         String email = scanner.nextLine();
+
         System.out.print("Id borne : ");
+        if (!scanner.hasNextLine()) return;
         String borne = scanner.nextLine();
 
         LocalDate dateArrivee = null;
         while (true) {
             System.out.print("Date d'arrivée (format jj/mm/aaaa) : ");
+            if (!scanner.hasNextLine()) return;
             String dateA = scanner.nextLine();
             if (!DateEtHeures.dateValide(dateA)) {
                 System.out.println(new MessageBuilder().addErrorMessage("❌ La date d'arrivée est invalide.").build());
@@ -61,6 +65,7 @@ public class GestionnaireReservation {
         LocalTime heureArrivee = null;
         while (true) {
             System.out.print("Heure d'arrivée (format hh:mm) : ");
+            if (!scanner.hasNextLine()) return;
             String heureA = scanner.nextLine();
             if (!DateEtHeures.HEURE_PATTERN.matcher(heureA).matches()) {
                 System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure d'arrivée ne respecte pas le format hh:mm.").build());
@@ -77,6 +82,7 @@ public class GestionnaireReservation {
         LocalDate dateDepart = null;
         while (true) {
             System.out.print("Date de départ (format jj/mm/aaaa) : ");
+            if (!scanner.hasNextLine()) return;
             String dateD = scanner.nextLine();
             if (!DateEtHeures.dateValide(dateD)) {
                 System.out.println(new MessageBuilder().addErrorMessage("❌ La date de départ est invalide.").build());
@@ -93,6 +99,7 @@ public class GestionnaireReservation {
         LocalTime heureDepart = null;
         while (true) {
             System.out.print("Heure de départ (format hh:mm) : ");
+            if (!scanner.hasNextLine()) return;
             String heureD = scanner.nextLine();
             if (!DateEtHeures.HEURE_PATTERN.matcher(heureD).matches()) {
                 System.out.println(new MessageBuilder().addErrorMessage("❌ L'heure de départ ne respecte pas le format hh:mm.").build());
@@ -113,8 +120,9 @@ public class GestionnaireReservation {
         String immat = null;
         while (true) {
             System.out.print("Immatriculation du véhicule : ");
+            if (!scanner.hasNextLine()) return;
             immat = scanner.nextLine();
-            if (!plaqueValide(immat)) {
+            if (!Immatriculations.plaqueValide(immat)) {
                 System.out.println(new MessageBuilder().addErrorMessage("❌ L'immatriculation du véhicule est invalide.").build());
             } else {
                 break;
@@ -194,7 +202,6 @@ public class GestionnaireReservation {
             }
         }
     }
-
 
     public static void checkingDepart() {
         Scanner scanner = new Scanner(System.in);

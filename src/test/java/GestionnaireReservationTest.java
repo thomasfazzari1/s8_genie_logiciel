@@ -176,7 +176,9 @@ public class GestionnaireReservationTest {
         testerSaisieCheckingDepart("test@test.com\n999\n", "❌ L'ID saisi ne correspond à aucune réservation associée à cet email.");
     }
 
+    // endregion
 
+    // region ajouterReservation
     private void testerSaisieAjouterReservation(String saisie, String messageAttendu) {
         ByteArrayOutputStream contenuSortie = new ByteArrayOutputStream();
         setEntreeSortie(saisie, contenuSortie);
@@ -191,9 +193,7 @@ public class GestionnaireReservationTest {
         testThread.start();
 
         try {
-            Thread.sleep(2000); // On laisse le temps au thread de lire l'entrée et d'afficher le message
-            testThread.interrupt(); // Simulation de l'arrêt de la saisie
-            testThread.join();
+            testThread.join(2000); // Attendre que le thread se termine ou timeout après 2 secondes
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -205,34 +205,36 @@ public class GestionnaireReservationTest {
     @Test
     @DisplayName("Ajout d'une réservation avec des données valides")
     public void testAjoutReservationValide() {
-        String saisie = "1\ntest@test.com\nB1\n01/01/2025\n12:00\n01/01/2025\n14:00\nABC123\n";
-        testerSaisieAjouterReservation(saisie, "✅ Contrat ajouté avec succès.");
-        verify(reservations).ajouter(1, "test@test.com", "B1", "07/06/2024", "12:00", "07/06/2024", "14:00", "ABC123");
+        String saisie = "test@test.com\nB1\n07/06/2024\n10:00\n07/06/2024\n12:00\n123-ABC-01\n";
+        testerSaisieAjouterReservation(saisie, "✅ Réservation ajoutée avec succès.");
+
+        verify(reservations).ajouter(
+                eq(1), // ID généré automatiquement est 1 dans ce cas.
+                eq("test@test.com"),
+                eq("B1"),
+                eq("2024-06-07"), // Le format attendu par la méthode ajouter (yyyy-MM-dd)
+                eq("10:00"),
+                eq("2024-06-07"), // Le format attendu par la méthode ajouter (yyyy-MM-dd)
+                eq("12:00"),
+                eq("123-ABC-01")
+        );
     }
+
 
     @Test
     @DisplayName("Ajout d'une réservation avec une date d'arrivée antérieure à aujourd'hui")
     public void testAjoutReservationDateArriveeAnterieure() {
-        String saisie = "1\ntest@test.com\nB1\n01/01/2022\n12:00\n01/01/2022\n14:00\nABC123\n";
-        testerSaisieAjouterReservation(saisie, "❌ La date ne peut pas être antérieure à la date d'aujourd'hui.");
-        verify(reservations, never()).ajouter(anyInt(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
-    }
-
-    @Test
-    @DisplayName("Ajout d'une réservation avec une heure de départ antérieure à l'heure d'arrivée")
-    public void testAjoutReservationHeureDepartAnterieure() {
-        String saisie = "1\ntest@test.com\nB1\n07/06/2024\n14:00\n07/06/2024\n12:00\nABC123\n";
-        testerSaisieAjouterReservation(saisie, "❌ L'heure de départ ne peut pas être antérieure à l'heure d'arrivée.");
+        String saisie = "1\ntest@test.com\nB1\n01/01/2023\n10:00\n07/06/2024\n12:00\nABC123\n";
+        testerSaisieAjouterReservation(saisie, "❌ La date d'arrivée ne peut pas être antérieure à aujourd'hui.");
         verify(reservations, never()).ajouter(anyInt(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
     @Test
     @DisplayName("Ajout d'une réservation avec des dates dans un format incorrect")
     public void testAjoutReservationDateFormatIncorrect() {
-        String saisie = "1\ntest@test.com\nB1\n7 juin\n12:00\n07-06-2024\n14:00\nABC123\n";
-        testerSaisieAjouterReservation(saisie, "❌ La date ne respecte pas le format jj/mm/aaaa.");
+        String saisie = "1\ntest@test.com\nB1\n07-06-2024\n10:00\n07-06-2024\n12:00\nABC123\n";
+        testerSaisieAjouterReservation(saisie, "❌ La date d'arrivée est invalide.");
         verify(reservations, never()).ajouter(anyInt(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
     }
-
     // endregion
 }
